@@ -37,9 +37,14 @@ def merge_list(list1, list2):
 
 def get_code_list_from_remote():
     result = []
+    
+    proxies = {
+        "http": None,
+        "https": None,
+    }
 
     url = "https://filecxx.com/zh_CN/activation_code.html"
-    response = requests.get(url)
+    response = requests.get(url, proxies=proxies)
     html_content = response.text
 
     soup = BeautifulSoup(html_content, "html.parser")
