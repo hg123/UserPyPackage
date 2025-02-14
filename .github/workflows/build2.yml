@@ -1,0 +1,37 @@
+name: Build UserPyPackage2
+
+on:
+  push:
+    branches: [main]  # 当 main 分支有推送时触发
+  pull_request:
+    branches: [main]  # 当有拉取请求到 main 分支时触发
+  workflow_dispatch:   # 允许手动触发 workflow
+
+jobs:
+  build:
+    runs-on: windows-latest  # 指定运行在 Windows 最新版本
+
+    steps:
+      - uses: actions/checkout@v3  # 拉取代码
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'  # 指定 Python 版本 (根据项目需求更改)
+          architecture: 'x64'  # 指定架构 x64/x86 (根据项目需求更改)
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+          if (Test-Path "requirements.txt") { pip install -r requirements.txt }  # 安装项目依赖
+
+      - name: Build executable
+        run: pyinstaller auto.spec  # 使用 .spec 文件打包
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: UserPyPackage-exe  # artifact 名称
+          path: dist/  # 打包后的 exe 文件路径
+  
