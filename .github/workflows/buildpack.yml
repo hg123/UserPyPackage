@@ -33,7 +33,7 @@ jobs:
 
       - name: 打包(只能是main.py)
         run: |
-          pyinstaller --onefile --add-data "favicon.ico;." main.py  # ;. means put it in the root
+          pyinstaller auto.spec
 
       - name: Upload Package
         uses: actions/upload-artifact@v4
