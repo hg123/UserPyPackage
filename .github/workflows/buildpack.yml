@@ -8,10 +8,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - { platform: x64, os: ubuntu-latest }
           - { platform: x64, os: windows-latest }
           - { platform: x86, os: windows-latest }
-          - { platform: x64, os: macos-latest }
+
 
     name: main-${{ matrix.platform }}-${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -34,10 +33,10 @@ jobs:
 
       - name: 打包(只能是main.py)
         run: |
-          pyinstaller -Fw main.py -i favicon.ico -n main-${{ matrix.os }}-${{ matrix.platform }}
+          pyinstaller --onefile --add-data "favicon.ico;." main.py  # ;. means put it in the root
 
       - name: Upload Package
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Python-Package-${{ matrix.os }}-${{ matrix.platform }}
           path: dist/
